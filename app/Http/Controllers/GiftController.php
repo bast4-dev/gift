@@ -31,7 +31,7 @@ class GiftController extends Controller
     {
         $request->validate([
             'name' => 'required|string|min:3|max:50',
-            'url' => 'nullable|url|starts_with:http://,https://',
+            'url' => 'nullable|url:http,https',
             'details' => 'nullable|string',
             'price' => 'required|numeric|decimal:0,2|min:0',
         ], [
@@ -53,31 +53,28 @@ class GiftController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Gift $gift)
     {
-        $gift = Gift::findOrFail($id);
         return view('gifts.show', compact('gift'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Gift $gift)
     {
-        $gift = Gift::findOrFail($id);
         return view('gifts.edit', compact('gift'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Gift $gift)
     {
-        $gift = Gift::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string|min:3|max:50',
-            'url' => 'nullable|url|starts_with:http://,https://',
+            'url' => 'nullable|url:http,https',
             'details' => 'nullable|string',
             'price' => 'required|numeric|decimal:0,2|min:0',
         ], [
@@ -99,11 +96,9 @@ class GiftController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Gift $gift)
     {
-        $gift = Gift::findOrFail($id);
         $gift->delete();
-
         return redirect()->route('gifts.index');
     }
 }
