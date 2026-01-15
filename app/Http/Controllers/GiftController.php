@@ -1,0 +1,109 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Gift;
+use Illuminate\Http\Request;
+
+class GiftController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $gifts = Gift::all();
+        return view('gifts.index', compact('gifts'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('gifts.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|min:3|max:50',
+            'url' => 'nullable|url|starts_with:http://,https://',
+            'details' => 'nullable|string',
+            'price' => 'required|numeric|decimal:0,2|min:0',
+        ], [
+            'name.required' => 'Le nom est obligatoire.',
+            'name.min' => 'Le nom doit contenir au moins 3 caractères.',
+            'name.max' => 'Le nom ne peut pas dépasser 50 caractères.',
+            'price.required' => 'Le prix est obligatoire.',
+            'price.numeric' => 'Le prix doit être un nombre valide.',
+            'price.min' => 'Le prix doit être positif.',
+            'url.url' => 'L\'URL doit être valide.',
+            'url.starts_with' => 'L\'URL doit commencer par http:// ou https://',
+        ]);
+
+        Gift::create($request->all());
+
+        return redirect()->route('gifts.index');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        $gift = Gift::findOrFail($id);
+        return view('gifts.show', compact('gift'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $gift = Gift::findOrFail($id);
+        return view('gifts.edit', compact('gift'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $gift = Gift::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|min:3|max:50',
+            'url' => 'nullable|url|starts_with:http://,https://',
+            'details' => 'nullable|string',
+            'price' => 'required|numeric|decimal:0,2|min:0',
+        ], [
+            'name.required' => 'Le nom est obligatoire.',
+            'name.min' => 'Le nom doit contenir au moins 3 caractères.',
+            'name.max' => 'Le nom ne peut pas dépasser 50 caractères.',
+            'price.required' => 'Le prix est obligatoire.',
+            'price.numeric' => 'Le prix doit être un nombre valide.',
+            'price.min' => 'Le prix doit être positif.',
+            'url.url' => 'L\'URL doit être valide.',
+            'url.starts_with' => 'L\'URL doit commencer par http:// ou https://',
+        ]);
+
+        $gift->update($request->all());
+
+        return redirect()->route('gifts.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $gift = Gift::findOrFail($id);
+        $gift->delete();
+
+        return redirect()->route('gifts.index');
+    }
+}
