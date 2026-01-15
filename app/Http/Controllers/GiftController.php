@@ -30,7 +30,7 @@ class GiftController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        Gift::create($request->all());
+        Gift::create($request->validated());
         return redirect()->route('gifts.index');
     }
 
@@ -56,7 +56,7 @@ class GiftController extends Controller
     public function update(StorePostRequest $request, Gift $gift)
     {
 
-        $gift->update($request->all());
+        $gift->update($request->validated());
         return redirect()->route('gifts.index');
     }
 
