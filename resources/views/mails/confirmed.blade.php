@@ -6,7 +6,7 @@
     <title>Nouveau cadeau !</title>
 </head>
 <body>
-    <p>
+    <p style="color: #0000FF; font-weight: bold;">
         Le cadeau {{ $giftName }} a bien été ajouté ({{ $giftPrice }}€).
     </p>
 </body>
